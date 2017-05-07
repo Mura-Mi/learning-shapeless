@@ -11,6 +11,12 @@ case class Green()
 
 trait CsvEncoder[A] {
   def encode(value: A): List[String]
+  def apply(value: A) = encode(value)
+}
+
+object CsvEncoder {
+  def apply[A](implicit enc: CsvEncoder[A]):CsvEncoder[A] = enc
+  def instance[A](func: A => List[String]): CsvEncoder[A] = value => func(value)
 }
 
 sealed trait Shape
@@ -18,8 +24,6 @@ final case class Rectangle(width: Double, height: Double) extends Shape
 final case class Circle(radius: Double) extends Shape
 
 object Ch1 extends App {
-  println("moeeeee!!!")
-
   lazy val genericEmp = Generic[Employee].to(Employee("Ohta", 33, false))
   lazy val genericIce = Generic[IceCream].to(IceCream("Vanilla", 0, true))
 
